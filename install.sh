@@ -7,7 +7,8 @@ set -euo pipefail
 # =========================
 
 export DOTFILES_DIR
-DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# Ruta canónica del repo (evita duplicados tipo .../dotfiles/dotfiles en mensajes)
+DOTFILES_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
 export DOTFILES_LOG_FILE="${DOTFILES_LOG_FILE:-$HOME/.dotfiles-install.log}"
 touch "$DOTFILES_LOG_FILE" 2>/dev/null || true
@@ -217,8 +218,23 @@ fi
 if [[ "${SHELL:-}" != "$(command -v zsh)" ]]; then
   warn "Tu shell actual no es zsh. Se intentará cambiar con chsh."
   if confirm "¿Cambiar tu shell por defecto a zsh (recomendado)?"; then
-    run_cmd "Cambiar shell por defecto (chsh)" chsh -s "$(command -v zsh)"
-    warn "Cierra sesión y vuelve a entrar para aplicar el cambio de shell."
+    local zsh_path
+    zsh_path="$(command -v zsh)"
+    # chsh exige que el shell esté en /etc/shells
+    if [[ -n "$zsh_path" && -x "$zsh_path" ]]; then
+      if ! grep -Fxq "$zsh_path" /etc/shells 2>/dev/null; then
+        step "Añadir zsh a /etc/shells"
+        echo "$zsh_path" | sudo tee -a /etc/shells >>"$DOTFILES_LOG_FILE" 2>&1 && success "zsh añadido a /etc/shells" || warn "No se pudo añadir zsh a /etc/shells (chsh puede fallar)."
+      fi
+    fi
+    step "Cambiar shell por defecto (chsh)"
+    if chsh -s "${zsh_path:-$(command -v zsh)}" >>"$DOTFILES_LOG_FILE" 2>&1; then
+      success "Shell por defecto cambiado a zsh."
+      warn "Cierra sesión y vuelve a entrar para aplicar el cambio."
+    else
+      warn "chsh falló (revisa $DOTFILES_LOG_FILE). Puedes cambiarlo después con: chsh -s $(command -v zsh)"
+      warn "Cierra sesión y vuelve a entrar después de ejecutar chsh."
+    fi
   fi
 fi
 }

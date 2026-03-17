@@ -100,7 +100,22 @@ install_python() {
         return 1
       fi
     fi
-    run_cmd "Instalar pyenv (pyenv.run)" bash -c 'curl -fsSL https://pyenv.run | bash'
+    step "Instalar pyenv (pyenv.run)"
+    _log "[CMD] curl -fsSL https://pyenv.run | bash"
+    if ! bash -c 'curl -fsSL https://pyenv.run | bash' >>"$DOTFILES_LOG_FILE" 2>&1; then
+      # Fallback: clonar pyenv desde GitHub (pyenv.run puede fallar por red/proxy/SSL)
+      warn "Instalador pyenv.run falló. Intentando clonar pyenv desde GitHub..."
+      step "Clonar pyenv desde GitHub"
+      _log "[CMD] git clone pyenv -> $HOME/.pyenv"
+      if git clone --depth 1 https://github.com/pyenv/pyenv.git "$HOME/.pyenv" >>"$DOTFILES_LOG_FILE" 2>&1; then
+        success "pyenv instalado desde GitHub."
+      else
+        error "No se pudo instalar pyenv. Revisa el log: $DOTFILES_LOG_FILE"
+        return 1
+      fi
+    else
+      success "Instalar pyenv (pyenv.run)"
+    fi
   fi
 
   ensure_block_in_rc "$HOME/.zshrc"

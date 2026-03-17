@@ -26,7 +26,7 @@ git clone git@github.com:JorgeDir/dotfiles.git dotfiles && cd dotfiles && chmod 
 | 6 | Node | nvm v0.39.7 + Node LTS + alias default |
 | 7 | pnpm | pnpm vía corepack (fallback script oficial) |
 | 8 | VS Code | VS Code (repo MS) + extensiones recomendadas |
-| 9 | GUI Tools | DBeaver CE (snap) + NoSQLBooster (.deb) |
+| 9 | GUI Tools | DBeaver CE (snap o apt) + NoSQLBooster (AppImage) |
 
 ## Configurar AWS SSO (wizard interactivo)
 
@@ -91,6 +91,63 @@ El wizard administra `~/.aws/config` y se abre desde el menú principal con la o
   - `python --version` (debería ser 3.13.12)
   - `node --version`
   - `pnpm --version`
+
+## Instalar DBeaver y NoSQLBooster desde la CLI
+
+Si el módulo GUI Tools no los instaló, puedes hacerlo manualmente:
+
+### DBeaver CE
+
+**Opción 1 — Snap:**
+```bash
+sudo snap install dbeaver-ce
+```
+
+**Opción 2 — APT (PPA):**
+```bash
+sudo add-apt-repository -y ppa:serge-rider/dbeaver-ce
+sudo apt-get update
+sudo apt-get install -y dbeaver-ce
+```
+
+Comprobar: `dbeaver &`
+
+### NoSQLBooster (MongoDB)
+
+Requiere FUSE (libfuse2). Luego descarga el AppImage y ejecútalo:
+
+```bash
+# Dependencia en Ubuntu 22.04+
+sudo apt-get install -y libfuse2
+
+# Descargar AppImage (versión 10.1.4)
+mkdir -p ~/.local/share/nosqlbooster
+curl -fsSL https://s3.nosqlbooster.com/download/releasesv10/nosqlbooster4mongo-10.1.4.AppImage -o ~/.local/share/nosqlbooster/nosqlbooster4mongo.AppImage
+chmod +x ~/.local/share/nosqlbooster/nosqlbooster4mongo.AppImage
+
+# Ejecutar (o añadir ~/.local/bin al PATH y enlazar)
+~/.local/share/nosqlbooster/nosqlbooster4mongo.AppImage
+```
+
+Opcional: enlace en PATH y entrada en el menú de aplicaciones:
+```bash
+mkdir -p ~/.local/bin
+ln -sf ~/.local/share/nosqlbooster/nosqlbooster4mongo.AppImage ~/.local/bin/nosqlbooster4mongo
+
+# Para que aparezca en el menú de aplicaciones
+mkdir -p ~/.local/share/applications
+cat > ~/.local/share/applications/nosqlbooster4mongo.desktop << EOF
+[Desktop Entry]
+Name=NoSQLBooster for MongoDB
+Comment=GUI client for MongoDB
+Exec=$HOME/.local/share/nosqlbooster/nosqlbooster4mongo.AppImage
+Icon=database
+Type=Application
+Categories=Development;Database;
+StartupNotify=true
+EOF
+```
+Tras crear el `.desktop`, si no aparece en el menú al momento, cierra sesión y vuelve a entrar o ejecuta: `update-desktop-database ~/.local/share/applications` (si está disponible).
 
 ## Logs
 
