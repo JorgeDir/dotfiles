@@ -1,0 +1,59 @@
+[default]
+region = us-east-1
+
+[profile {{DEV_PROFILE}}]
+sso_session = developer
+sso_account_id = 606212394872
+sso_role_name = Developer
+region = us-east-1
+
+[sso-session developer]
+sso_start_url = https://d-90678f4040.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+
+[profile {{DEVELOPS_PROFILE}}]
+sso_session = develops
+sso_account_id = 672769200561
+sso_role_name = DSMultiadDev-developer
+region = us-east-1
+
+[sso-session develops]
+sso_start_url = https://d-90678f4040.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+[profile {{QA_PROFILE}}]
+sso_session = devops-qa
+sso_account_id = 626965695375
+sso_role_name = DSMultiadDev-developer
+region = us-east-1
+
+[sso-session devops-qa]
+sso_start_url = https://d-90678f4040.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+[profile {{UAT_PROFILE}}]
+sso_session = devops-uat
+sso_account_id = 940482407666
+sso_role_name = DralmeyQATVA
+region = us-east-1
+
+[sso-session devops-uat]
+sso_start_url = https://d-90678f4040.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+
+[profile {{PROD_PROFILE}}]
+sso_session = devops-prod
+sso_account_id = 686255968903
+sso_role_name = DralmeyProdTVAPolicy
+region = us-east-1
+
+[sso-session devops-prod]
+sso_start_url = https://d-90678f4040.awsapps.com/start
+sso_region = us-east-1
+sso_registration_scopes = sso:account:access
+

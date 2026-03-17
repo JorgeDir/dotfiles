@@ -1,0 +1,17 @@
+# Credenciales reales
+config/aws/credentials
+config/kubectl/kubeconfig
+secrets/
+**/.env
+**/.env.local
+
+# Backups generados por install.sh
+*.backup.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+

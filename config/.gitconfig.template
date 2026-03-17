@@ -1,0 +1,27 @@
+[user]
+  name = {{NAME}}
+  email = {{EMAIL}}
+
+[core]
+  editor = {{EDITOR}}
+  autocrlf = input
+
+[init]
+  defaultBranch = {{DEFAULT_BRANCH}}
+
+[pull]
+  rebase = false
+
+[push]
+  default = simple
+
+[color]
+  ui = auto
+
+[alias]
+  st = status -sb
+  co = checkout
+  br = branch
+  ci = commit
+  last = log -1 --stat
+
