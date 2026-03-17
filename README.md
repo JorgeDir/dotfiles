@@ -2,8 +2,16 @@
 
 ## Inicio rápido
 
+**HTTPS** (funciona sin configurar nada):
+
 ```bash
-git clone <TU_REPO_GITHUB> dotfiles && cd dotfiles && chmod +x install.sh && ./install.sh
+git clone https://github.com/JorgeDir/dotfiles.git dotfiles && cd dotfiles && chmod +x install.sh && ./install.sh
+```
+
+**SSH** (si ya tienes clave SSH en GitHub):
+
+```bash
+git clone git@github.com:JorgeDir/dotfiles.git dotfiles && cd dotfiles && chmod +x install.sh && ./install.sh
 ```
 
 ## Módulos incluidos
